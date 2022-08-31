@@ -1,18 +1,27 @@
-const loadPhones = async (searchText) => {
+const loadPhones = async (searchText, dataLimit) => {
     const url = `https://openapi.programming-hero.com/api/phones?search=${searchText}`
     const res = await fetch(url);
     const data = await res.json();
-    displayPhones(data.data)
+    displayPhones(data.data, dataLimit)
     // fetch(url)
     //     .then(response => response.json())
     //     .then(data => displayPhones(data))
 }
 
-const displayPhones = phones => {
+const displayPhones = (phones, dataLimit) => {
     const phonesContainer = document.getElementById('phone-container');
     phonesContainer.textContent = '';
-    //if you want to display 20 phones only
-    phones = phones.slice(0, 20);
+
+    const showAll = document.getElementById('show-all');
+    if (dataLimit && phones.length > 10) {
+        //if you want to display 20 phones only
+        phones = phones.slice(0, 10);
+
+        showAll.classList.remove('d-none');
+    }
+    else {
+        showAll.classList.add('d-none');
+    }
 
     //display no phone found
     const noPhone = document.getElementById('no-phone');
@@ -44,13 +53,17 @@ const displayPhones = phones => {
     toggleLoader(false);
 }
 
-document.getElementById('btn-search').addEventListener('click', function () {
-    //start spinner or loader
+const processSearch = (dataLimit) => {
     toggleLoader(true);
     const searchField = document.getElementById('input-field');
     const searchText = searchField.value;
-    searchField.value = '';
-    loadPhones(searchText);
+    // searchField.value = '';
+    loadPhones(searchText, dataLimit);
+}
+
+document.getElementById('btn-search').addEventListener('click', function () {
+    //start spinner or loader
+    processSearch(10);
 });
 
 const toggleLoader = isLoading => {
@@ -62,5 +75,10 @@ const toggleLoader = isLoading => {
         loaderSection.classList.add('d-none');
     }
 }
+
+//not a best way to show all
+document.getElementById('btn-show-all').addEventListener('click', function () {
+    processSearch();
+})
 
 // loadPhones();
