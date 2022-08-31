@@ -33,7 +33,7 @@ const displayPhones = (phones, dataLimit) => {
     }
 
     phones.forEach(phone => {
-        console.log(phone)
+        // console.log(phone)
         const phoneDiv = document.createElement('div');
         phoneDiv.innerHTML = `
         <div class="col">
@@ -42,7 +42,7 @@ const displayPhones = (phones, dataLimit) => {
             <div class="card-body">
                 <h3 class="card-title">Brand: ${phone.brand}</h3>
                 <h5 class="card-title">Phone name: ${phone.phone_name}</h5>
-                <p class="card-text">${phone.slug}</p>
+                <button onclick="loadPhoneDetails('${phone.slug}')" href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#phoneDetailsModa">show details</button>
             </div>
         </div>
     </div>
@@ -66,6 +66,14 @@ document.getElementById('btn-search').addEventListener('click', function () {
     processSearch(10);
 });
 
+//search input field enter key handler
+document.getElementById('input-field').addEventListener('keypress', function (e) {
+    // console.log(e.key)
+    if (e.key === 'Enter') {
+        processSearch(10);
+    }
+});
+
 const toggleLoader = isLoading => {
     const loaderSection = document.getElementById('loader');
     if (isLoading) {
@@ -81,4 +89,25 @@ document.getElementById('btn-show-all').addEventListener('click', function () {
     processSearch();
 })
 
-// loadPhones();
+const loadPhoneDetails = async (id) => {
+    const url = `https://openapi.programming-hero.com/api/phone/${id}`
+    const res = await fetch(url);
+    const data = await res.json();
+    displayPhoneDetails(data.data);
+}
+
+const displayPhoneDetails = phone => {
+    console.log(phone)
+    const modalTitle = document.getElementById('phoneDetailsModaLabel');
+    modalTitle.innerText = phone.name;
+    const phoneDetails = document.getElementById('phone-details');
+    phoneDetails.innerHTML = `
+    <p>Release Date: ${phone.releaseDate ? phone.releaseDate : 'no releaseDate found'}</p>
+    <p>Others: ${phone.others ? phone.others.Bluetooth : 'no Bluetooth'}</p>
+    <p>Main Features: ${phone.mainFeatures ? phone.mainFeatures.storage : 'no mainFeatures'}</p>
+    <p>sensors: ${phone.mainFeatures.sensors[0]} ${phone.mainFeatures.sensors[1]} ${phone.mainFeatures.sensors[2]}</p>
+    `;
+    //don't need to do append because we did't create any tag because it is already exist in html
+}
+
+loadPhones('apple');
