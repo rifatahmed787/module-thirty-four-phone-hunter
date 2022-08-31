@@ -97,7 +97,7 @@ const loadPhoneDetails = async (id) => {
 }
 
 const displayPhoneDetails = phone => {
-    console.log(phone)
+    // console.log(phone)
     const modalTitle = document.getElementById('phoneDetailsModaLabel');
     modalTitle.innerText = phone.name;
     const phoneDetails = document.getElementById('phone-details');
@@ -110,4 +110,4 @@ const displayPhoneDetails = phone => {
     //don't need to do append because we did't create any tag because it is already exist in html
 }
 
-loadPhones('apple');
+// loadPhones('apple');
