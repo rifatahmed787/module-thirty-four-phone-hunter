@@ -11,6 +11,8 @@ const loadPhones = async (searchText) => {
 const displayPhones = phones => {
     const phonesContainer = document.getElementById('phone-container');
     phonesContainer.textContent = '';
+    //if you want to display 20 phones only
+    phones = phones.slice(0, 20);
     phones.forEach(phone => {
         console.log(phone)
         const phoneDiv = document.createElement('div');
