@@ -13,6 +13,16 @@ const displayPhones = phones => {
     phonesContainer.textContent = '';
     //if you want to display 20 phones only
     phones = phones.slice(0, 20);
+
+    //display no phone found
+    const noPhone = document.getElementById('no-phone');
+    if (phones.length === 0) {
+        noPhone.classList.remove('d-none')
+    }
+    else {
+        noPhone.classList.add('d-none');
+    }
+
     phones.forEach(phone => {
         console.log(phone)
         const phoneDiv = document.createElement('div');
@@ -30,13 +40,27 @@ const displayPhones = phones => {
         `;
         phonesContainer.appendChild(phoneDiv);
     })
+    //stop spinner or loader
+    toggleLoader(false);
 }
 
 document.getElementById('btn-search').addEventListener('click', function () {
+    //start spinner or loader
+    toggleLoader(true);
     const searchField = document.getElementById('input-field');
     const searchText = searchField.value;
     searchField.value = '';
     loadPhones(searchText);
-})
+});
 
-loadPhones();
+const toggleLoader = isLoading => {
+    const loaderSection = document.getElementById('loader');
+    if (isLoading) {
+        loaderSection.classList.remove('d-none');
+    }
+    else {
+        loaderSection.classList.add('d-none');
+    }
+}
+
+// loadPhones();
